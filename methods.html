@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>方式 Top 100｜錢真正的引擎</title>
+  <link rel="stylesheet" href="css/wiki.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <a class="skip" href="#main">跳到本文</a>
+  <div class="mobile-bar" data-mobile></div>
+  <div class="layout">
+    <nav class="nav" data-nav></nav>
+    <main id="main">
+      <p class="kicker">Methods</p>
+      <h1>全世界最能賺錢的 100 種方式</h1>
+      <p class="lede">職業是名片上的字。方式是引擎：所有權、資本、智財、勞動槓桿、注意力、制度。同一個人可以同時開好幾具引擎。</p>
+
+      <article>
+        <p>Forbes 億萬富豪榜幾乎不是「最會考試的職業排行」。它比較像<strong>所有權排行</strong>：公司、資源、品牌、平台。普通家庭能複製的，通常不是第 1 名創業神話，而是第 5 名的廣泛持股、第 20 名的稅務遞延、第 97 名的儲蓄率、第 100 名「把薪水轉成資產」。</p>
+        <div class="callout">
+          <strong>給高中生的讀法</strong>
+          起步難度 1 是現在就能做（記帳、指數、作品）。5 是需要資本、網路或很長訓練。先收集低難度引擎，再決定要不要賭高難度。
+        </div>
+      </article>
+
+      <div id="board">
+        <div class="toolbar">
+          <input type="search" data-q placeholder="搜尋方式、陷阱、關鍵字">
+          <select data-cat></select>
+          <select data-sort>
+            <option value="now">依現在賺錢力</option>
+            <option value="pred">依 AI 之後</option>
+            <option value="access">依起步難度（易→難）</option>
+          </select>
+          <span class="legend" data-count></span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>現在</th>
+                <th>預測</th>
+                <th>方式</th>
+                <th>分類</th>
+                <th>引擎</th>
+                <th>AI</th>
+              </tr>
+            </thead>
+            <tbody data-body></tbody>
+          </table>
+        </div>
+      </div>
+
+      <article>
+        <h2>金字塔：越上面越能睡後還在賺，也越不平</h2>
+        <div class="diagram">
+          <svg viewBox="0 0 980 300" role="img">
+            <rect x="1" y="1" width="978" height="298" fill="#fffdf7" stroke="#b9ad98"/>
+            <polygon points="490,28 700,90 280,90" fill="#1d5551"/>
+            <text x="490" y="70" text-anchor="middle" fill="#fff" font-size="14">所有權／平台／專利池</text>
+            <polygon points="280,100 700,100 820,168 160,168" fill="#8a6a22"/>
+            <text x="490" y="142" text-anchor="middle" fill="#fff" font-size="14">生意系統、商用資產、權利金</text>
+            <polygon points="160,178 820,178 900,248 80,248" fill="#a33b1c"/>
+            <text x="490" y="220" text-anchor="middle" fill="#fff" font-size="14">高薪勞動、抽成、專業時薪</text>
+            <rect x="80" y="258" width="820" height="28" fill="#efe8d8" stroke="#b9ad98"/>
+            <text x="490" y="278" text-anchor="middle" font-size="13">底層：時間換現金。多數人從這裡開始，不該永遠停在這裡。</text>
+          </svg>
+        </div>
+        <p class="caption">往上爬不是道德升級，是數學：一份努力被重複使用的次數變多。風險與不公平也一起變大。</p>
+      </article>
+      <footer class="site" data-footer></footer>
+    </main>
+  </div>
+  <script src="js/wiki.js"></script>
+  <script src="js/methods.js"></script>
+  <script>
+    MoneyWiki.mountChrome();
+    MoneyWiki.renderMethods(document.getElementById("board"), window.METHODS);
+  </script>
+</body>
+</html>

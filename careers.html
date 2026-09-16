@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>職業 Top 100｜現在榜與預測榜</title>
+  <link rel="stylesheet" href="css/wiki.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <a class="skip" href="#main">跳到本文</a>
+  <div class="mobile-bar" data-mobile></div>
+  <div class="layout">
+    <nav class="nav" data-nav></nav>
+    <main id="main">
+      <p class="kicker">Occupations</p>
+      <h1>全世界最能賺錢的 100 個職業</h1>
+      <p class="lede">左邊是現在的賺錢力，右邊是把 AI、老化、綠能、地緣折進去之後的預測名次。點列可展開。這不是命運簽，是價目表。</p>
+
+      <article>
+        <p>「最賺錢」在這裡指的是：高所得市場裡的<strong>典型總報酬＋上檔</strong>，不是快樂、也不是社會貢獻。美國 BLS 的平均年薪把醫療專科推到最前面；金融與科技則常靠分紅和股票，官方平均會低估。台灣勞動部另有一套本地榜：機師、精算、醫師。</p>
+        <div class="note">
+          <strong>怎麼讀名次變化</strong>
+          綠色 ↑ 表示預測榜比現在更前面（相對更貴或更被需要）。紅色 ↓ 表示會被壓縮。放射科、藥劑、初級分析與部分創意執行往下；AI 建造、半導體、資安、電網、精神與照顧往上。
+        </div>
+      </article>
+
+      <div id="board">
+        <div class="toolbar">
+          <input type="search" data-q placeholder="搜尋職業、技能、關鍵字">
+          <select data-cat></select>
+          <select data-ai hidden>
+            <option value="">全部 AI</option>
+            <option>強化</option>
+            <option>改寫</option>
+            <option>削弱</option>
+            <option>高風險</option>
+          </select>
+          <select data-sort>
+            <option value="now">依現在榜</option>
+            <option value="pred">依預測榜</option>
+            <option value="rise">依上升最多</option>
+            <option value="pay">依美元參考薪</option>
+          </select>
+          <span class="chips" data-chips></span>
+          <span class="legend" data-count></span>
+        </div>
+        <p class="legend">標籤：強化＝AI 讓它更貴　改寫＝職稱還在、內容大變　削弱＝溢價被壓縮　高風險＝任務本身容易被機器做完</p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>現在</th>
+                <th>預測</th>
+                <th>職業</th>
+                <th>分類</th>
+                <th>賺錢力（參考）</th>
+                <th>AI</th>
+              </tr>
+            </thead>
+            <tbody data-body></tbody>
+          </table>
+        </div>
+      </div>
+
+      <article>
+        <h2>讀榜時的三個陷阱</h2>
+        <div class="grid-3">
+          <div class="card">
+            <h3>平均被極端值拉高</h3>
+            <p>職業運動員、執行長、製作人的「平均」看起來漂亮，多數人拿不到。看上檔時，同時看有多少人會輸。</p>
+          </div>
+          <div class="card">
+            <h3>國家會改價錢</h3>
+            <p>美國心臟科與台灣心臟科不是同一種商品。健保、工會、簽證、財閥結構都會改價。</p>
+          </div>
+          <div class="card">
+            <h3>高薪常買斷生活</h3>
+            <p>投行、外科、新創選擇權，用健康與時間換現金。總收入高，不表示人生方程式比較優。</p>
+          </div>
+        </div>
+      </article>
+      <footer class="site" data-footer></footer>
+    </main>
+  </div>
+  <script src="js/wiki.js"></script>
+  <script src="js/careers.js"></script>
+  <script>
+    MoneyWiki.mountChrome();
+    MoneyWiki.renderCareers(document.getElementById("board"), window.CAREERS);
+  </script>
+</body>
+</html>
