@@ -301,12 +301,12 @@ th {
   letter-spacing: 0.06em;
   color: var(--muted);
   background: #efe8d8;
-  position: sticky;
-  top: 53px;
-  z-index: 2;
 }
 
-tr[data-open] { cursor: pointer; }
+tr[data-open] {
+  cursor: pointer;
+  scroll-margin-top: 88px;
+}
 tr[data-open]:hover td { background: #fbf6ea; }
 
 .rank { font-family: var(--mono); font-weight: 600; white-space: nowrap; }
@@ -384,13 +384,19 @@ footer.site {
 
 @media (max-width: 920px) {
   .layout { display: block; }
-  .nav { display: none; position: static; height: auto; }
+  .nav {
+    display: none;
+    position: static;
+    height: auto;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+    padding: 12px 16px 20px;
+  }
   .nav.open { display: block; }
   .mobile-bar { display: flex; }
   main { padding: 28px 18px 72px; }
   h1 { font-size: 32px; }
   .grid-2, .grid-3, .detail-grid { grid-template-columns: 1fr; }
-  th { top: 0; }
 }
 
 @media (max-width: 640px) {

@@ -39,6 +39,11 @@
       bar.querySelector("[data-toggle]").addEventListener("click", () => {
         document.querySelector("[data-nav]")?.classList.toggle("open");
       });
+      document.querySelector("[data-nav]")?.addEventListener("click", (e) => {
+        if (e.target.closest("a") && window.matchMedia("(max-width: 920px)").matches) {
+          document.querySelector("[data-nav]")?.classList.remove("open");
+        }
+      });
     }
 
     const foot = document.querySelector("[data-footer]");
