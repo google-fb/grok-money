@@ -148,6 +148,10 @@
     const chips = root.querySelector("[data-chips]");
     const tbody = root.querySelector("[data-body]");
     const count = root.querySelector("[data-count]");
+    if (!q || !cat || !sort || !tbody || !count) {
+      root.insertAdjacentHTML("beforeend", "<p class='warn'>榜單工具列缺了必要欄位，請重新整理頁面。</p>");
+      return;
+    }
     let aiFilter = "";
     const open = new Set();
     const boot = hashId("d-");
@@ -276,6 +280,10 @@
     const tbody = root.querySelector("[data-body]");
     const count = root.querySelector("[data-count]");
     const chips = root.querySelector("[data-chips]");
+    if (!q || !cat || !sort || !tbody || !count) {
+      root.insertAdjacentHTML("beforeend", "<p class='warn'>榜單工具列缺了必要欄位，請重新整理頁面。</p>");
+      return;
+    }
     let aiFilter = "";
     const open = new Set();
     const boot = hashId("m-");

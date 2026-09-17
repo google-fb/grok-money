@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>方式 Top 100｜錢真正的引擎</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="css/wiki.css">
+  <link rel="stylesheet" href="css/wiki.css?v=3">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@600;700&display=swap" rel="stylesheet">
@@ -49,7 +49,10 @@
             <option value="pred">依 AI 之後</option>
             <option value="access">依起步難度（易→難）</option>
           </select></label>
-          <label>AI 篩選<span class="chips" data-chips></span></label>
+          <div>
+            <span class="field-label">AI 篩選</span>
+            <span class="chips" data-chips></span>
+          </div>
           <span class="legend" data-count></span>
         </div>
         <p class="legend">標籤：強化＝AI 讓它更貴　改寫＝做法還在、內容大變　削弱＝溢價被壓縮　高風險＝任務本身容易被機器做完</p>
@@ -91,8 +94,8 @@
       <footer class="site" data-footer></footer>
     </main>
   </div>
-  <script src="js/wiki.js"></script>
-  <script src="js/methods.js"></script>
+  <script src="js/wiki.js?v=3"></script>
+  <script src="js/methods.js?v=3"></script>
   <script>
     MoneyWiki.mountChrome();
     MoneyWiki.renderMethods(document.getElementById("board"), window.METHODS);
