@@ -12,19 +12,30 @@
 </head>
 <body>
   <a class="skip" href="#main">跳到本文</a>
-  <div class="mobile-bar" data-mobile></div>
+  <div class="mobile-bar" data-mobile><a class="brand" href="index.html">賺錢課</a></div>
   <div class="layout">
-    <nav class="nav" data-nav></nav>
+    <nav class="nav" id="site-nav" data-nav>
+      <a class="brand" href="index.html">賺錢課<small>給還沒修過這門課的人</small></a>
+      <ol>
+        <li><a href="index.html">這門課</a></li>
+        <li><a href="map.html">賺錢地圖</a></li>
+        <li><a href="careers.html">職業 Top 100</a></li>
+        <li><a href="methods.html">方式 Top 100</a></li>
+        <li><a href="ai.html">AI 衝擊與預測</a></li>
+        <li><a href="start.html">高中生怎麼走</a></li>
+        <li><a href="sources.html">文獻與方法</a></li>
+      </ol>
+    </nav>
     <main id="main">
-      <p class="kicker">Forecast 2030–2035</p>
+      <p class="kicker">預測 2030–2035</p>
       <h1>AI 不是來搶「職業」。<br>它來拆「任務」。</h1>
       <p class="lede">預測榜不是算命。它是把幾份夠厚的報告疊在一起，問：同樣會賺錢的人，五年後誰的議價會上升。</p>
-      <p class="byline">主要依據：WEF Future of Jobs 2025、McKinsey MGI 2023–2025、BLS 任務結構、OECD 醫療報酬</p>
+      <p class="byline">主要依據：世界經濟論壇《未來工作報告》2025、McKinsey 全球研究院（MGI）2023–2025、美國勞動統計任務結構、經合組織醫療報酬</p>
 
       <article>
         <h2>報告實際講了什麼</h2>
         <p>世界經濟論壇問全球雇主：到 2030，哪些職缺長得最快、縮得最快。成長端幾乎是同一組字：<strong>大數據、金融科技工程、AI／機器學習、軟體、資安、綠能工程</strong>。衰退端也幾乎同一組：<strong>出納、行政祕書、印刷、部分會計稽核、資料輸入</strong>。2025 年版第一次把平面設計與法律秘書推進衰退觀察，說明生成式模型已碰到知識工作，不只工廠。</p>
-        <p>McKinsey 更技術：今天已展示的技術，理論上能自動化約 <strong>57%</strong> 的美國工時。他們立刻補一句——這不是失業預測。採用要時間，而且超過七成技能在「可自動」與「不可自動」的工作裡都會用到。真正暴衝的職缺關鍵字是 <strong>AI fluency</strong>（會使用與管理 AI），兩年內需求約七倍。</p>
+        <p>McKinsey 更技術：今天已展示的技術，理論上能自動化約 <strong>57%</strong> 的美國工時。他們立刻補一句——這不是失業預測。採用要時間，而且超過七成技能在「可自動」與「不可自動」的工作裡都會用到。真正暴衝的職缺關鍵字是 <strong>AI 熟練度</strong>（會用、會管、會負責），兩年內需求約七倍。</p>
         <p>WEF 的總帳比較溫和：宏觀趨勢到 2030 創造約 1.7 億個職、取代 9200 萬，淨增加 7800 萬。AI 與資訊處理本身：創造 1100 萬、取代 900 萬。機器人與自走系統是少數「取代多於創造」的技術。也就是說：<strong>標題黨的滅絕論、公關稿的無事論，兩邊都不準。</strong></p>
 
         <h2>預測榜怎麼重排</h2>
@@ -48,18 +59,19 @@
           <div class="card">
             <div class="num">±</div>
             <h3>誰握有所有權</h3>
-            <p>基金經理、PE／VC、創辦人、資料中心電的房東。AI 讓研究更便宜，也讓能承擔風險的資本更貴。</p>
+            <p>基金經理、私募股權／創投（PE／VC）、創辦人、資料中心電的房東。AI 讓研究更便宜，也讓能承擔風險的資本更貴。</p>
           </div>
         </div>
 
         <h2>一張簡表：誰上、誰下</h2>
         <div class="table-wrap">
           <table>
+            <caption>預測榜誰上、誰下的簡表</caption>
             <thead>
-              <tr><th>方向</th><th>代表</th><th>為什麼</th></tr>
+              <tr><th scope="col">方向</th><th scope="col">代表</th><th scope="col">為什麼</th></tr>
             </thead>
             <tbody>
-              <tr><td>大幅上升</td><td>對沖基金 PM、AI 研究、ML 工程、半導體製程、核工／電網、CISO</td><td>資本槓桿＋算力瓶頸＋攻擊面擴大</td></tr>
+              <tr><td>大幅上升</td><td>對沖基金投資經理、AI 研究、機器學習工程、半導體製程、核工／電網、資安長</td><td>資本槓桿＋算力瓶頸＋攻擊面擴大</td></tr>
               <tr><td>穩中有升</td><td>外科、麻醉、精神、護理麻醉、資安分析、環境工程</td><td>現場、責任、老化、氣候</td></tr>
               <tr><td>名次下滑</td><td>放射（純讀片）、皮膚（純看診）、飛行員、行銷主管、藥劑、初級金融分析</td><td>符號與影像先被吃；航空中期被自動飛行談判</td></tr>
               <tr><td>編制變瘦</td><td>律師金字塔、顧問金字塔、藝術執行、圖庫、通用翻譯</td><td>頂部更貴，底部更便宜</td></tr>

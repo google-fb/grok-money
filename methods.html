@@ -12,16 +12,28 @@
 </head>
 <body>
   <a class="skip" href="#main">跳到本文</a>
-  <div class="mobile-bar" data-mobile></div>
+  <div class="mobile-bar" data-mobile><a class="brand" href="index.html">賺錢課</a></div>
   <div class="layout">
-    <nav class="nav" data-nav></nav>
+    <nav class="nav" id="site-nav" data-nav>
+      <a class="brand" href="index.html">賺錢課<small>給還沒修過這門課的人</small></a>
+      <ol>
+        <li><a href="index.html">這門課</a></li>
+        <li><a href="map.html">賺錢地圖</a></li>
+        <li><a href="careers.html">職業 Top 100</a></li>
+        <li><a href="methods.html">方式 Top 100</a></li>
+        <li><a href="ai.html">AI 衝擊與預測</a></li>
+        <li><a href="start.html">高中生怎麼走</a></li>
+        <li><a href="sources.html">文獻與方法</a></li>
+      </ol>
+    </nav>
     <main id="main">
-      <p class="kicker">Methods</p>
+      <p class="kicker">方式榜</p>
       <h1>全世界最能賺錢的 100 種方式</h1>
       <p class="lede">職業是名片上的字。方式是引擎：所有權、資本、智財、勞動槓桿、注意力、制度。同一個人可以同時開好幾具引擎。</p>
+      <noscript><p class="warn">這份榜單需要開啟 JavaScript。若你是雙擊檔案打開，請改用 README 的本機伺服器。</p></noscript>
 
       <article>
-        <p>Forbes 億萬富豪榜幾乎不是「最會考試的職業排行」。它比較像<strong>所有權排行</strong>：公司、資源、品牌、平台。普通家庭能複製的，通常不是第 1 名創業神話，而是第 5 名的廣泛持股、第 20 名的稅務遞延、第 97 名的儲蓄率、第 100 名「把薪水轉成資產」。</p>
+        <p>Forbes 億萬富豪榜幾乎不是「最會考試的職業排行」。它比較像<strong>所有權排行</strong>：公司、資源、品牌、平台。普通家庭能複製的，通常不是第 1 名創業神話，而是第 5 名的廣泛持股、第 20 名的合法延後繳稅、第 97 名的儲蓄率、第 100 名「把薪水轉成資產」。</p>
         <div class="callout">
           <strong>給高中生的讀法</strong>
           起步難度 1 是現在就能做（記帳、指數、作品）。5 是需要資本、網路或很長訓練。先收集低難度引擎，再決定要不要賭高難度。
@@ -30,25 +42,28 @@
 
       <div id="board">
         <div class="toolbar">
-          <input type="search" data-q placeholder="搜尋方式、陷阱、關鍵字">
-          <select data-cat></select>
-          <select data-sort>
+          <label>搜尋<input type="search" data-q placeholder="方式、陷阱、關鍵字"></label>
+          <label>分類<select data-cat></select></label>
+          <label>排序<select data-sort>
             <option value="now">依現在賺錢力</option>
             <option value="pred">依 AI 之後</option>
             <option value="access">依起步難度（易→難）</option>
-          </select>
+          </select></label>
+          <label>AI 篩選<span class="chips" data-chips></span></label>
           <span class="legend" data-count></span>
         </div>
+        <p class="legend">標籤：強化＝AI 讓它更貴　改寫＝做法還在、內容大變　削弱＝溢價被壓縮　高風險＝任務本身容易被機器做完</p>
         <div class="table-wrap">
           <table>
+            <caption>賺錢方式現在榜與預測榜。點一列展開說明。</caption>
             <thead>
               <tr>
-                <th>現在</th>
-                <th>預測</th>
-                <th>方式</th>
-                <th>分類</th>
-                <th>引擎</th>
-                <th>AI</th>
+                <th scope="col">現在</th>
+                <th scope="col">預測</th>
+                <th scope="col">方式</th>
+                <th scope="col">分類</th>
+                <th scope="col">引擎</th>
+                <th scope="col">AI</th>
               </tr>
             </thead>
             <tbody data-body></tbody>

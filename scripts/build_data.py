@@ -10,10 +10,8 @@ def js_assign(name, rows):
     return f"window.{name} = {json.dumps(rows, ensure_ascii=False, indent=2)};\n"
 
 
-# now = 2025-26 earning-power rank
-# pred = 2030-35 AI-adjusted earning-power rank
-# usdMean: BLS May 2025 mean annual USD where available; finance/tech use typical total-comp mid
-# ai: 強化 / 改寫 / 削弱 / 高風險
+# now / pred on each row are sketches only.
+# apply_career_ranks() writes the published 1-100 ranks.
 
 CAREERS = [
     dict(id="c01", now=1, pred=2, name="小兒外科醫師", en="Pediatric Surgeon", cat="醫療",
@@ -32,7 +30,7 @@ CAREERS = [
          barrier="內科之後再加心臟專科，訓練長、值班重。",
          ai="改寫", aiWhy="心電圖與影像判讀會大量被模型接手，複雜決策與手術仍需人負責。",
          why="心血管疾病是高所得國家的主要死因，需求穩定且保險給付高。",
-         path="高中把物理與生理學學扎实；大學先理解「程序型 vs 藥物型」專科差異。",
+         path="高中把物理與生理學學紮實；大學先理解「程序型 vs 藥物型」專科差異。",
          tw="心臟科在大型醫學中心屬高薪專科，但受健保點值影響，不像美國那麼極端。",
          tags=["執照", "老齡化", "程序型"],
          src="BLS May 2025：Cardiologists 平均 $454,940。OECD 亦指出高程序專科普遍高於一般科。"),
@@ -45,7 +43,7 @@ CAREERS = [
          path="若喜歡影像與電腦，優先走「介入放射」或「影像＋AI 品質管控」，不要只想當看片機器。",
          tw="放射科仍是熱門專科；未來價差會出現在「會做介入／會管模型」的人。",
          tags=["執照", "AI暴露", "影像"],
-         src="BLS May 2025：$381,530。McKinsey 指出數位資訊處理技能自動化暴露最高；WEF 亦警示知識工作被 GenAI 改寫。"),
+         src="BLS May 2025：$381,530。McKinsey 指出數位資訊處理技能自動化暴露最高；WEF 亦警示知識工作被生成式 AI 改寫。"),
     dict(id="c04", now=4, pred=3, name="骨科外科醫師", en="Orthopedic Surgeon", cat="醫療",
          usdMean=373570, pay="美國平均約 37 萬美元",
          upside="關節置換、脊椎手術在老齡化社會需求上升。",
@@ -93,7 +91,7 @@ CAREERS = [
          ai="削弱", aiWhy="皮膚影像分類是 AI 強項；純粹看疹開藥會被壓縮。手術、病理與醫美操作較抗。",
          why="現在貴，因為工時相對友善、自費醫美、癌症篩檢三個引擎疊在一起。",
          path="不要只看「生活品質好」；未來要會手術或會做複雜醫美，才守得住溢價。",
-         tw="醫美診所市場成熟，頭部醫師收入可以非常高，方差也極大。",
+         tw="醫美診所市場成熟，頭部醫師收入可以非常高，輸贏差也極大。",
          tags=["執照", "自費", "AI暴露"],
          src="BLS May 2025：$323,530。"),
     dict(id="c09", now=9, pred=9, name="急診科醫師", en="Emergency Physician", cat="醫療",
@@ -120,11 +118,11 @@ CAREERS = [
          usdMean=1500000, pay="績效好時常見 50 萬–300 萬美元以上",
          upside="頂部分潤可到千萬美元；虧損年也可能很低。",
          barrier="極窄門：名校、買方實習、可驗證的投資紀錄。",
-         ai="強化", aiWhy="模型讓研究更快，但真正稀缺的是承擔風險的決策權與資本信任。AI 會淘汰不會用模型的分析師，抬高能做決策的 PM。",
+         ai="強化", aiWhy="模型讓研究更快，但真正稀缺的是承擔風險的決策權與資本信任。AI 會淘汰不會用模型的分析師，抬高能做決策的投資經理。",
          why="管的是別人的錢，抽的是績效費。這是「資本槓桿」不是「時薪」。",
          path="高中先學機率、程式與會計；大學走理工或財工，並練習寫可回測的想法。不要把「看盤」當職業。",
          tw="台灣買方規模較小，多數人會先經過外商銀行、壽險投資或自行到新加坡／香港。",
-         tags=["窄門", "分紅", "資本", "方差大"],
+         tags=["窄門", "分紅", "資本", "輸贏差大"],
          src="eFinancialCareers 2024 調查：對沖基金平均總薪酬約 $487k；資深 PM 常見 $0.5–3M，頂部更高。"),
     dict(id="c12", now=12, pred=4, name="私募股權合夥人", en="Private Equity Partner", cat="金融",
          usdMean=1200000, pay="合夥人總報酬常破百萬美元",
@@ -234,7 +232,7 @@ CAREERS = [
          why="用別人的錢買未來公司的一小塊。本質是「選人＋持股」。",
          path="高中先做出東西（社團、專案、小生意），比考進財金系更接近這條路。",
          tw="台灣 VC 票面較小，常跟亞洲美元基金合作。",
-         tags=["所有權", "網路", "方差大"],
+         tags=["所有權", "網路", "輸贏差大"],
          src="創投薪酬結構以管理費＋Carry 為主，公開平均數參考價值低，上檔極高。"),
     dict(id="c23", now=23, pred=18, name="護理麻醉師", en="Nurse Anesthetist", cat="醫療",
          usdMean=248320, pay="美國平均約 25 萬美元",
@@ -284,16 +282,16 @@ CAREERS = [
          why="BLS 數字嚴重低估：它少算股票。真正的執行長賣的是「最後決策」。",
          path="高中開始帶專案、對結果負責。執行長不是科系，是長期被信任的紀錄。",
          tw="上市櫃總座薪資公開，但同樣是股票與分紅決定財富。",
-         tags=["所有權", "決策", "方差大"],
+         tags=["所有權", "決策", "輸贏差大"],
          src="BLS May 2025：CEO 平均 $269,630；股權獎勵不完整計入。Visual Capitalist 亦提醒此低估。"),
     dict(id="c28", now=28, pred=40, name="航空駕駛員", en="Airline Pilot", cat="運輸",
-         usdMean=288650, pay="美國平均約 29 萬美元；台灣年薪約 360–393 萬台幣",
+         usdMean=288650, pay="美國平均約 29 萬美元；台灣約 360–393 萬台幣（約 11–12 萬美元）",
          upside="廣體機、國際線與年資加成明顯。",
          barrier="體檢、飛時、執照、景氣循環。",
          ai="削弱", aiWhy="自動飛行已很強，2030 前仍需兩名飛行員；2035 後短程自駕會開始談判工時與編制。身心與責任仍在。",
          why="現在貴，因為生命責任＋供給被體檢與飛時卡住。台灣勞動部連續調查的高薪王。",
          path="視力、作息、英文與負擔得起飛訓成本，缺一不可。先做法規與體檢功課。",
-         tw="勞動部：航空駕駛員年薪約 364–393 萬，長期居職類榜首。",
+         tw="勞動部：年薪約 364–393 萬台幣，本地職類常年第一。本地第一 ≠ 比美國機師更賺。",
          tags=["執照", "體檢", "循環"],
          src="BLS May 2025：$288,650。台灣勞動部 2024–2025 職類別薪資調查。"),
     dict(id="c29", now=29, pred=3, name="人工智慧研究科學家", en="AI Research Scientist", cat="科技",
@@ -310,7 +308,7 @@ CAREERS = [
          usdMean=185840, pay="美國平均約 19 萬，合夥人可破百萬",
          upside="華爾街事務所合夥人與原告訴訟分成是兩個不同上檔。",
          barrier="法學院債務、工時、金字塔淘汰。",
-         ai="削弱", aiWhy="契約初稿、檢索、盡職調查被 GenAI 大幅加速，初級律師需求會縮。能上庭、能談、能扛責任的人留下。",
+         ai="削弱", aiWhy="契約初稿、檢索、盡職調查被生成式 AI 大幅加速，初級律師需求會縮。能上庭、能談、能扛責任的人留下。",
          why="法律把國家暴力變成計時費率。平均數被大量普通律師拉低。",
          path="高中練論證寫作；先搞清楚要當訴訟、商務還是專利律師，三者薪水世界不同。",
          tw="勞動部律師年薪約 155 萬，事務所分紅才是真正差距。",
@@ -487,13 +485,13 @@ CAREERS = [
          tags=["STEM", "股權", "供給增加"],
          src="BLS May 2025：$148,100。levels.fyi 2025 報告與台灣頁。WEF Future of Jobs 2025。"),
     dict(id="c48", now=48, pred=38, name="精算師", en="Actuary", cat="金融",
-         usdMean=141480, pay="美國平均約 14 萬；台灣年薪可逾 360 萬",
+         usdMean=141480, pay="美國平均約 14 萬美元；台灣約 360 萬台幣（約 11 萬美元）",
          upside="保險與退休金的定價權。",
          barrier="一連串極難證照。",
          ai="改寫", aiWhy="計算被模型加速，監理、假設與溝通留下。台灣勞動部調查中長期居次席。",
          why="把不確定的未來變成可以賣的保單。",
          path="高中數學要強，且耐得住考試馬拉松。",
-         tw="勞動部：精算師年薪約 363–366 萬，常年第二。",
+         tw="勞動部：約 363–366 萬台幣，常年第二。先看幣別：360 萬台幣很頂，換成美元仍低於美國精算平均。",
          tags=["證照", "數學", "保險"],
          src="BLS May 2025：$141,480。台灣勞動部職類別薪資調查。"),
     dict(id="c49", now=49, pred=50, name="經濟學家", en="Economist", cat="專業",
@@ -510,7 +508,7 @@ CAREERS = [
          usdMean=142510, pay="美國平均約 14 萬美元",
          upside="地緣風險、國防與顧問。",
          barrier="職缺少。",
-         ai="強化", aiWhy="WEF 指地緣碎片化會增加安全與策略職。模型能摘要，不能替你承擔立場。",
+         ai="改寫", aiWhy="模型能摘要新聞與論文；地緣判斷、立場與責任仍是人。學術職缺少，不要把它讀成「會自動變貴」。",
          why="世界越分裂，越有人願意買「判斷」。",
          path="高中讀歷史與國際關係，練習用證據說話。",
          tw="職缺在政府、媒體、顧問與供應鏈風險單位。",
@@ -598,7 +596,7 @@ CAREERS = [
          src="BLS May 2025：$144,440。WEF Future of Jobs 2025。"),
     dict(id="c59", now=59, pred=36, name="資安分析師", en="Information Security Analyst", cat="科技",
          usdMean=132510, pay="美國平均約 13 萬美元",
-         upside="雲端安全、紅隊、金融資安更高。",
+         upside="雲端安全、模擬駭客測試（紅隊）、金融資安更高。",
          barrier="要持續學習攻擊面。",
          ai="強化", aiWhy="AI 讓攻擊更便宜，防守更貴。WEF 將資安列快速成長。地緣衝突加乘。",
          why="數位世界的鎖匠與守衛，失敗代價是整間公司。",
@@ -760,7 +758,7 @@ CAREERS = [
          usdMean=116800, pay="美國平均約 12 萬美元",
          upside="買方與產業專家更高；初級賣方正在縮。",
          barrier="證照與工時。",
-         ai="削弱", aiWhy="模型、備忘錄、可比公司分析被 GenAI 吃得很兇。要升級成決策者或產業專家。",
+         ai="削弱", aiWhy="模型、備忘錄、可比公司分析被生成式 AI 吃得很兇。要升級成決策者或產業專家。",
          why="現在仍是金融入場券；不要把它當終點。",
          path="高中學會計與寫作；大學開始寫真正的產業筆記。",
          tw="外資與壽險投資處薪資帶較高。",
@@ -777,7 +775,7 @@ CAREERS = [
          tags=["交付", "協調"],
          src="BLS May 2025：$110,740。WEF Future of Jobs 2025。"),
     dict(id="c77", now=77, pred=69, name="管理顧問", en="Management Analyst", cat="專業",
-         usdMean=113790, pay="美國平均約 11 萬，MBB 總薪遠高於此",
+         usdMean=113790, pay="美國平均約 11 萬，麥肯錫等頂尖顧問總薪遠高於此",
          upside="策略所合夥人與產業專家。",
          barrier="問題解決面試與旅行生活。",
          ai="削弱", aiWhy="初級研究與簡報被模型取代。WEF 將部分分析職列衰退。能進入董事會對話的人留下。",
@@ -857,24 +855,24 @@ CAREERS = [
          tags=["照顧", "功能"],
          src="BLS May 2025：$101,280。"),
     dict(id="c85", now=85, pred=19, name="半導體製程／設備工程師", en="Semiconductor Process Engineer", cat="STEM",
-         usdMean=160000, pay="台灣頭部年薪常見 200–300 萬台幣以上",
+         usdMean=85000, pay="台灣頭部常見 200–300 萬台幣（約 6–9 萬美元）；美商／派駐更高",
          upside="先進製程、設備商、海外派駐。",
          barrier="輪班、無塵室、良率壓力。",
          ai="強化", aiWhy="AI 需要晶片，晶片需要會守良率的人。這是台灣在世界地圖上的稀缺職。",
          why="全球最貴的工廠，付給讓它不要停機的人。",
          path="高中物理化學；大學電機、材料、機械、化工都能進。先理解輪班生活。",
-         tw="TSMC、MediaTek、設備商是本土高薪集群。Levels.fyi 台積電軟體／產品軌道中位亦可逾 250 萬。",
+         tw="台積電、聯發科與設備商的製程／設備軌道是本土高薪集群；輪班與無塵室是代價。軟體軌道數字不要直接套用。",
          tags=["半導體", "輪班", "國策"],
          src="台灣產業薪酬與 levels.fyi 台灣頁；勞動部細職類未完整反映股票。"),
     dict(id="c86", now=86, pred=82, name="企業軟體業務", en="Enterprise Software AE", cat="銷售",
          usdMean=180000, pay="達成獎金後常見 15–30 萬美元",
          upside="頭部雲端與資安業務可破 50 萬美元。",
-         barrier="配額壓力，收入方差大。",
+         barrier="配額壓力，收入輸贏差大。",
          ai="改寫", aiWhy="開發信被自動化，複雜標案與高層關係留下。",
          why="一張企業合約可能數百萬美元，抽成讓個人收入接近合夥人。",
          path="高中練當面溝通；理工背景不是必須，但能講技術會加分。",
          tw="外商雲端、資安、軟體代理是本土少數高佣金軌道。",
-         tags=["佣金", "方差大", "營收"],
+         tags=["佣金", "輸贏差大", "營收"],
          src="科技業公開薪酬區間與佣金計畫；BLS 無法完整捕捉。"),
     dict(id="c87", now=87, pred=81, name="專利／智財律師", en="Patent Attorney", cat="法律",
          usdMean=200000, pay="兼具理工與法律者常見高於一般律師",
@@ -888,8 +886,8 @@ CAREERS = [
          src="美國專利律師市場薪酬通常高於一般律師中位；BLS 未單列。"),
     dict(id="c88", now=88, pred=83, name="科技產品經理", en="Product Manager", cat="科技",
          usdMean=170000, pay="美國科技業總薪常見 15–30 萬美元",
-         upside="能定方向並對營收負責的 PM 接近經營者。",
-         barrier="職稱通膨嚴重，普通 PM 正在變便宜。",
+         upside="能定方向並對營收負責的產品經理接近經營者。",
+         barrier="職稱通膨嚴重，普通產品經理正在變便宜。",
          ai="改寫", aiWhy="寫規格被加速；取捨、研究現場與政治留下。",
          why="決定做什麼比決定怎麼做更靠近利潤。",
          path="高中做出一個有使用者的產品，並寫下你為什麼砍掉其他功能。",
@@ -906,12 +904,12 @@ CAREERS = [
          tw="廣告、金融、製造良率與語音是本土戰場。",
          tags=["STEM", "成長", "上線"],
          src="WEF Future of Jobs 2025；levels.fyi 2025。"),
-    dict(id="c90", now=90, pred=18, name="資安長／資安主管", en="CISO", cat="管理",
+    dict(id="c90", now=90, pred=18, name="資安長／資安主管", en="Chief Information Security Officer", cat="管理",
          usdMean=220000, pay="大型機構常見 20 萬美元以上",
-         upside="上市公司與金融 CISO 含獎金更高。",
+         upside="上市公司與金融資安長含獎金更高。",
          barrier="先在事件裡活下來。",
          ai="強化", aiWhy="攻擊面被 AI 放大，董事會開始願意為「不被駭死」付高薪。",
-         why="資安從 IT 角落走進董事會。",
+         why="資安從資訊部門的角落走進董事會。",
          path="先走資安分析或系統工程，不要一畢業就想當長字輩。",
          tw="金控與科技公司開始設獨立資安長。",
          tags=["資安", "董事會", "地緣"],
@@ -927,7 +925,7 @@ CAREERS = [
          tags=["STEM", "研究", "窄門"],
          src="HRT、Two Sigma、Jane Street 等公開職缺與 levels.fyi。"),
     dict(id="c92", now=92, pred=85, name="引水人／船舶監管", en="Harbor Pilot", cat="運輸",
-         usdMean=140000, pay="台灣年薪約 173 萬，屬本土高薪職",
+         usdMean=54000, pay="台灣年薪約 173 萬台幣（約 5.4 萬美元），屬本地高薪職",
          upside="港口流量與執照名額限制。",
          barrier="航海資歷＋特考，人數極少。",
          ai="改寫", aiWhy="輔助航行增加，港口責任與在地水文經驗留下。",
@@ -943,8 +941,8 @@ CAREERS = [
          ai="改寫", aiWhy="訓練分析會更科學，觀眾買單的仍是人的表現。",
          why="注意力經濟的極端值。平均被球星拉高，這是最危險的「看起來很賺」。",
          path="把它當技能不是當身分。高中同步學一門退役後能用的本事。",
-         tw="勞動部職業運動員月薪約 14–16 萬，方差極大。",
-         tags=["方差極大", "壽命短", "注意力"],
+         tw="勞動部職業運動員月薪約 14–16 萬，輸贏差極大。",
+         tags=["輸贏差極大", "壽命短", "注意力"],
          src="BLS May 2025：Athletes mean $206,180（受極端值拉高）。台灣勞動部調查。"),
     dict(id="c94", now=94, pred=86, name="房地產開發主管", en="Real Estate Developer", cat="資產",
          usdMean=180000, pay="專案分成後差異極大",
@@ -974,7 +972,7 @@ CAREERS = [
          why="一次命中可以吃十年權利金。大多數作品沒有第二次。",
          path="高中開始完成短片並學會結算。完成比夢想值錢。",
          tw="串流與政府補助改變現金流，不保證名利。",
-         tags=["智財", "方差極大"],
+         tags=["智財", "輸贏差極大"],
          src="BLS May 2025：Producers and directors $113,300。"),
     dict(id="c97", now=97, pred=89, name="健康科學講座教授", en="Health Specialties Professor", cat="學術",
          usdMean=147570, pay="美國平均約 15 萬美元",
@@ -986,7 +984,7 @@ CAREERS = [
          tw="醫學中心教職薪資加上兼診才有競爭力。",
          tags=["學術", "醫療", "上游"],
          src="BLS May 2025：Health specialties teachers $147,570。WEF：大學教師人數成長。"),
-    dict(id="c98", now=98, pred=91, name="策略顧問（MBB 合夥人軌道）", en="Strategy Partner Track", cat="專業",
+    dict(id="c98", now=98, pred=91, name="策略顧問（麥肯錫等頂尖所合夥人軌道）", en="Strategy Partner Track", cat="專業",
          usdMean=400000, pay="合夥人總薪常見數十萬至數百萬美元",
          upside="出路到 PE、企業經營與公共政策。",
          barrier="極端篩選與旅行生活。",
@@ -995,7 +993,7 @@ CAREERS = [
          path="高中練案例思考；把顧問當跳板比當終點更理性。",
          tw="外商所在台北有辦公室，晉升名額少。",
          tags=["窄門", "跳板", "AI暴露"],
-         src="MBB 公開薪酬討論；BLS 管理分析師平均嚴重低估合夥人。"),
+         src="麥肯錫／BCG／Bain 公開薪酬討論；BLS 管理分析師平均嚴重低估合夥人。"),
     dict(id="c99", now=99, pred=50, name="高級電力與電機技師", en="Master Electrician", cat="技職",
          usdMean=90000, pay="美國熟練技職常見 8–12 萬，加班後更高",
          upside="自營承包與工業案可超過許多白領。",
@@ -1030,7 +1028,7 @@ METHODS = [
          how="先做一個有人願意付錢的小問題。高中就能接案、做社團服務或小電商，重點是客戶不是老師。",
          catch="九成會失敗。不要把「當創業家」當身分，要把一次次交付當訓練。",
          aiWhy="AI 降低做產品的成本，也增加競爭。會找真問題、會募資、會活下來的創辦人更貴。",
-         tags=["所有權", "方差極大", "複利"]),
+         tags=["所有權", "輸贏差極大", "複利"]),
     dict(id="m02", now=2, pred=2, name="員工認股與選擇權", cat="所有權", engine="薪水換成公司的一小塊",
          access=3, ai="強化",
          why="很多科技與生技財富，來自上班時拿到的股票，不是本薪。",
@@ -1183,7 +1181,7 @@ METHODS = [
          why="降低從零創品牌的風險，用資本換系統。",
          how="讀加盟合約的退出與進貨條款，比看加盟說明會重要。",
          catch="很多特許只是把風險賣給你。",
-         aiWhy="選址與人力排程更數據化，合約不公仍然不公。",
+         aiWhy="選址與人力排程更資料化，合約不公仍然不公。",
          tags=["加盟", "資本"]),
     dict(id="m24", now=24, pred=23, name="電商自有品牌", cat="生意", engine="設計＋供應鏈＋流量",
          access=3, ai="改寫",
@@ -1247,7 +1245,7 @@ METHODS = [
          how="高中做小遊戲並讓陌生人玩完。玩完率比畫面重要。",
          catch="發行與行銷常比開發貴。",
          aiWhy="製作更便宜，發行更擁擠。",
-         tags=["遊戲", "方差大"]),
+         tags=["遊戲", "輸贏差大"]),
     dict(id="m33", now=33, pred=33, name="課程與教材授權", cat="智財", engine="把會的事變成可複製教材",
          access=2, ai="削弱",
          why="同一堂課可以賣給一萬人。",
@@ -1314,7 +1312,7 @@ METHODS = [
     dict(id="m42", now=42, pred=42, name="專案分成", cat="勞動", engine="不拿死薪水，拿成果%",
          access=3, ai="改寫",
          why="你的報酬跟創造的價值對齊。",
-         how="接案時談清楚分成與 dur。高中幫人做活動可試用小分成。",
+         how="接案時用合約寫清：分成怎麼算、做多久、誰擁有作品。高中幫人辦活動可以試很小的分成，先把帳算完。",
          catch="對方不做帳，分成就是故事。要合約。",
          aiWhy="交付更快，契約與信任更重要。",
          tags=["分成", "合約"]),
@@ -1335,9 +1333,9 @@ METHODS = [
     dict(id="m45", now=45, pred=46, name="危險、夜班與短缺津貼", cat="勞動", engine="用不受歡迎的時段換錢",
          access=2, ai="改寫",
          why="社會為了半夜、離島、高風險付溢價。",
-         how="在健康允許下，這是最快提高時薪的方法之一。",
-         catch="用健康換現金，長期常是虧的。",
-         aiWhy="現場班表不會消失。",
+         how="高中生不要用夜班、工地或危險津貼來加速賺錢，法律也不允許。先搞懂：社會多付錢，是因為這時段傷身體。",
+         catch="用健康換現金，長期常是虧的。成年後若真的要，先看勞檢、保險與工時。",
+         aiWhy="現場班表不會消失；比較能談的是安全與輪班，不是讓年輕人先去扛。",
          tags=["津貼", "健康"]),
     dict(id="m46", now=46, pred=45, name="證照溢價", cat="勞動", engine="法律允許你做別人不能做的事",
          access=3, ai="改寫",
@@ -1366,11 +1364,11 @@ METHODS = [
          how="選你能做一百集的題目。高中就能開始，但先保護隱私與課業。",
          catch="演算法改一次，收入可以腰斬。大多數頻道賺不到平均薪。",
          aiWhy="內容供給爆炸，分發更殘酷。",
-         tags=["平台", "方差大"]),
+         tags=["平台", "輸贏差大"]),
     dict(id="m50", now=50, pred=55, name="短影音帶貨", cat="注意力", engine="流量換成商品差價",
          access=2, ai="削弱",
          why="成交快，看起來很賺。",
-         how="若做，選你願意長期負責的產品。不要賣假健康。",
+         how="若只是理解這行：選你願意長期負責的產品，並講清楚「這是廣告」。高中不要賣保健、醫美、財經課。",
          catch="平台抽成、退貨、信任一次用完。",
          aiWhy="虛擬網紅與腳本工廠讓競爭變成噪音。",
          tags=["帶貨", "信任"]),
@@ -1391,7 +1389,7 @@ METHODS = [
     dict(id="m53", now=53, pred=60, name="直播打賞", cat="注意力", engine="即時情緒變現",
          access=2, ai="高風險",
          why="頭部主播收入可以很高。",
-         how="不建議當主計劃。若做，當成主題表達練習。",
+         how="高中不要做打賞直播。平台常有年齡門檻。想練習表達，用社團、演說或作品，關掉打賞。",
          catch="工時長、情緒勞動、收入不穩、未成年保護問題。",
          aiWhy="虛擬主播增加供給。",
          tags=["不穩定", "情緒勞動"]),
@@ -1433,8 +1431,8 @@ METHODS = [
     dict(id="m59", now=59, pred=58, name="教練與陪跑訂閱", cat="勞動", engine="賣進度與問責",
          access=2, ai="強化",
          why="人不是缺資訊，是缺有人看著自己做。",
-         how="高中當同學的課業或健身陪跑，先小額。",
-         catch="責任邊界要清楚，避免醫療或法律建議。",
+         how="高中可幫同學盯進度或一起練功，先小額、先徵得對方同意。不要扮演醫療、心理或法律專業。",
+         catch="責任邊界要清楚：你賣的是陪伴與提醒，不是診斷或處方。",
          aiWhy="計畫可生成，陪伴更貴。",
          tags=["陪伴"]),
     dict(id="m60", now=60, pred=59, name="政府與公共標案", cat="制度", engine="預算換成合約",
@@ -1489,7 +1487,7 @@ METHODS = [
     dict(id="m67", now=67, pred=71, name="域名、流量與媒體資產", cat="資本", engine="買已經有人來的入口",
          access=3, ai="削弱",
          why="一個被搜尋的名字可以收廣告或轉賣。",
-         how="把這當微型資產課，不要當暴富術。",
+         how="用它理解「流量會過期」，不要當暴富術。不要做假新聞站或藏廣告陷阱。",
          catch="搜尋規則一改就歸零。很多是賭場。",
          aiWhy="生成內容讓垃圾站更擁擠。",
          tags=["流量", "投機"]),
@@ -1531,7 +1529,7 @@ METHODS = [
     dict(id="m73", now=73, pred=73, name="員工內部創業", cat="所有權", engine="用公司的資源試新事業",
          access=3, ai="強化",
          why="你有薪水當跑道，又可能談到股權。",
-         how="先在公司裡交出側寫專案。高中對應是：在社團裡開新部門。",
+         how="先在公司裡交出一個額外專案，證明你能用現成資源做出新東西。高中對應：在社團裡開新部門。",
          catch="智慧財產可能屬於公司。先讀合約。",
          aiWhy="大公司需要內部有人把 AI 變成新產品線。",
          tags=["內部", "股權"]),
@@ -1622,9 +1620,9 @@ METHODS = [
     dict(id="m86", now=86, pred=86, name="運動與娛樂經紀", cat="注意力", engine="抽他人天分的成交",
          access=4, ai="改寫",
          why="球星與藝人需要把天分變成合約。",
-         how="先懂合約與勞動法。高中先幫同學辦演出並把錢算清楚。",
+         how="先懂合約與勞動法。高中可以幫同學辦演出、公開記帳，不要抽同學的分成，也不要代管別人的錢。",
          catch="關係生意，道德風險高。",
-         aiWhy="發現人才可以數據化，談判仍是人。",
+         aiWhy="發現人才可以資料化，談判仍是人。",
          tags=["經紀", "合約"]),
     dict(id="m87", now=87, pred=94, name="收藏品與藝術品", cat="資本", engine="品味市場的價差",
          access=4, ai="削弱",
@@ -1636,7 +1634,7 @@ METHODS = [
     dict(id="m88", now=88, pred=95, name="加密資產與鏈上協議", cat="資本", engine="開放網路的所有權代幣",
          access=3, ai="改寫",
          why="少數協議創造了新的資本形成方式。",
-         how="先理解它是高波動風險資產。高中最多用玩樂金研究，不要槓桿。",
+         how="高中最多用虧得起的玩樂金看它是什麼，不要開槓桿、不要聽「穩賺」。多數交易所有年齡限制。想學技能，去學程式與密碼學，不要學炒幣。",
          catch="詐騙、盜幣、監管、歸零。這不是「一定會取代法幣」的保證。",
          aiWhy="投機週期仍在，基礎設施工作比炒幣更接近真實技能。",
          tags=["高波動", "風險"]),
@@ -1650,7 +1648,7 @@ METHODS = [
     dict(id="m90", now=90, pred=88, name="外匯與利差（專業）", cat="交易", engine="貨幣的租金與波動",
          access=5, ai="削弱",
          why="專業交易台能賺，散戶大多是流動性提供者。",
-         how="高中學總經就好，不要開槓桿外匯帳戶。",
+         how="高中只學總經：利率、匯率、通膨。不要開槓桿外匯帳戶，也不要讓家人代開。",
          catch="零售外匯期望值常為負。",
          aiWhy="零售端更像娛樂，不是致富方法。",
          tags=["不建議新手", "槓桿"]),
@@ -1664,7 +1662,7 @@ METHODS = [
     dict(id="m92", now=92, pred=90, name="選擇權與結構型商品", cat="交易", engine="買賣波動本身",
          access=5, ai="削弱",
          why="專業者用來避險或表達觀點。",
-         how="先懂它為什麼常讓買家虧小錢、賣家偶發爆倉。",
+         how="先懂為什麼買家常虧小錢、賣家偶發爆倉。高中不要買「保本／高收益」包裝。看不懂就當成不要碰。",
          catch="複雜商品常是銀行比較會算的一邊。",
          aiWhy="定價更精準，散戶優勢更小。",
          tags=["複雜", "不建議新手"]),
@@ -1727,11 +1725,54 @@ METHODS = [
 ]
 
 
-def uniquify_pred(rows):
-    """Keep intended relative order, then assign unique 1-100 pred ranks."""
-    ordered = sorted(rows, key=lambda r: (r["pred"], r["now"], r["id"]))
-    for i, row in enumerate(ordered, 1):
-        row["pred"] = i
+# Official averages miss bonus/equity jobs. Park them next to peers, not at 85+.
+NOW_INSERT_AFTER = "c29"
+NOW_INSERTS = ["c91", "c98", "c89", "c90", "c86", "c87", "c95"]
+
+# 2030-35 earning-power order. Unique 1-100; do not reindex after this.
+PRED_ORDER = [
+    "c11", "c01", "c29", "c12", "c89", "c04", "c06", "c26", "c91", "c09",
+    "c16", "c22", "c85", "c90", "c02", "c05", "c07", "c23", "c53", "c21",
+    "c25", "c31", "c33", "c40", "c27", "c98", "c30", "c32", "c59", "c58",
+    "c47", "c88", "c86", "c95", "c36", "c37", "c45", "c52", "c73", "c43",
+    "c87", "c79", "c72", "c64", "c67", "c48", "c44", "c69", "c55", "c63",
+    "c10", "c14", "c17", "c18", "c24", "c19", "c20", "c99", "c100", "c81",
+    "c68", "c76", "c78", "c80", "c82", "c83", "c84", "c74", "c62", "c60",
+    "c66", "c34", "c56", "c57", "c38", "c70", "c13", "c08", "c03", "c28",
+    "c71", "c54", "c39", "c41", "c42", "c35", "c46", "c61", "c75", "c77",
+    "c65", "c94", "c96", "c97", "c92", "c93", "c15", "c49", "c50", "c51",
+]
+
+
+def apply_order(rows, order, field):
+    by_id = {r["id"]: r for r in rows}
+    missing = set(by_id) - set(order)
+    extra = set(order) - set(by_id)
+    if missing or extra:
+        raise SystemExit(f"{field} order mismatch missing={missing} extra={extra}")
+    if len(order) != len(set(order)):
+        raise SystemExit(f"{field} order has duplicates")
+    for i, cid in enumerate(order, 1):
+        by_id[cid][field] = i
+
+
+def apply_career_ranks(rows):
+    raw = [f"c{i:02d}" for i in range(1, 100)] + ["c100"]
+    base = [cid for cid in raw if cid not in NOW_INSERTS]
+    cut = base.index("c30")
+    now_order = base[:cut] + NOW_INSERTS + base[cut:]
+    apply_order(rows, now_order, "now")
+    apply_order(rows, PRED_ORDER, "pred")
+
+
+def warn_boost_drops(rows):
+    dropped = [
+        (r["id"], r["name"], r["now"], r["pred"])
+        for r in rows
+        if r.get("ai") == "強化" and r["pred"] > r["now"]
+    ]
+    if dropped:
+        print("強化 but falling:", dropped)
 
 
 def validate(rows, key):
@@ -1745,8 +1786,8 @@ def validate(rows, key):
 
 
 def main():
-    uniquify_pred(CAREERS)
-    uniquify_pred(METHODS)
+    apply_career_ranks(CAREERS)
+    warn_boost_drops(CAREERS)
     validate(CAREERS, "careers")
     validate(METHODS, "methods")
     OUT.mkdir(exist_ok=True)
