@@ -3,6 +3,7 @@ name: GitHub Pages
 on:
   push:
     branches: [main]
+  pull_request:
   workflow_dispatch:
 
 permissions:
@@ -13,17 +14,33 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  deploy:
+  stage:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-
       - name: Stage static site
         run: |
           mkdir -p _site
           cp .nojekyll 404.html favicon.svg index.html map.html careers.html methods.html ai.html start.html sources.html _site/
           cp -r css js _site/
+          test -f _site/index.html
+          test -f _site/js/wiki.js
+          test -f _site/js/careers.js
+          test -f _site/js/methods.js
+          test -f _site/css/wiki.css
+          test -f _site/.nojekyll
 
+  deploy:
+    needs: stage
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Stage static site
+        run: |
+          mkdir -p _site
+          cp .nojekyll 404.html favicon.svg index.html map.html careers.html methods.html ai.html start.html sources.html _site/
+          cp -r css js _site/
       - name: Publish gh-pages
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
