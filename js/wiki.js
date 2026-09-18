@@ -9,7 +9,11 @@
     ["sources.html", "文獻與方法"],
   ];
 
-  const page = (location.pathname.split("/").pop() || "index.html").toLowerCase();
+  function currentPage() {
+    const last = (location.pathname.split("/").filter(Boolean).pop() || "index.html").toLowerCase();
+    return last.endsWith(".html") ? last : "index.html";
+  }
+  const page = currentPage();
 
   function esc(s) {
     return String(s ?? "").replace(/[&<>"']/g, (c) =>

@@ -14,6 +14,19 @@ python3 -m http.server 4173
 
 然後開 <http://127.0.0.1:4173/>。
 
+## GitHub Pages
+
+這是靜態 HTML／CSS／JS，合併進 `main` 之後可以當成 GitHub Pages 網站。預期網址：
+
+<https://google-fb.github.io/grok-money/>
+
+1. 合併這份 PR。
+2. 打開 repo **Settings → Pages**。
+3. Build and deployment 選 **GitHub Actions**。第一次也可以在 **Actions** 裡手動跑 workflow `GitHub Pages`。
+4. 這個倉庫目前是 **private**。免費帳號的 Pages 只給 public repo；若網站打不開，把 repo 改成 Public，或升級 GitHub Pro。
+
+備用：Settings → Pages → Deploy from a branch，選 `main`、資料夾 `/ (root)`。根目錄有 `.nojekyll`，避免 GitHub 用 Jekyll 吃掉檔案。
+
 ## 頁面
 
 | 頁 | 內容 |
