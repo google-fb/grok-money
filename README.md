@@ -16,16 +16,14 @@ python3 -m http.server 4173
 
 ## GitHub Pages
 
-這是靜態 HTML／CSS／JS，合併進 `main` 之後可以當成 GitHub Pages 網站。預期網址：
+這是靜態 HTML／CSS／JS。workflow 會把網站推到 `gh-pages` 分支，**不再呼叫** `actions/configure-pages`（那個 action 在 Pages 尚未開啟時會 404，而且舊版跑在 Node 20）。
 
-<https://google-fb.github.io/grok-money/>
+預期網址：<https://google-fb.github.io/grok-money/>
 
-1. 合併這份 PR。
+1. 合併這份修正後，等 Actions 的 `GitHub Pages` 跑完（會建立／更新 `gh-pages`）。
 2. 打開 repo **Settings → Pages**。
-3. Build and deployment 選 **GitHub Actions**。第一次也可以在 **Actions** 裡手動跑 workflow `GitHub Pages`。
-4. 這個倉庫目前是 **private**。免費帳號的 Pages 只給 public repo；若網站打不開，把 repo 改成 Public，或升級 GitHub Pro。
-
-備用：Settings → Pages → Deploy from a branch，選 `main`、資料夾 `/ (root)`。根目錄有 `.nojekyll`，避免 GitHub 用 Jekyll 吃掉檔案。
+3. Build and deployment 選 **Deploy from a branch**，Branch 選 `gh-pages`、資料夾 `/ (root)`。
+4. 這個倉庫若仍是 **private**，免費帳號看不到 Pages；把 repo 改成 Public，或用 GitHub Pro。
 
 ## 頁面
 
