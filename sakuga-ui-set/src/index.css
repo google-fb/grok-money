@@ -1,0 +1,37 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: 'Helvetica Neue', Helvetica, Arial, 'Liberation Sans', sans-serif;
+
+  /* UI */
+  --color-ink: #1e1b4b;
+  --color-iris: #8b86f2;
+  --color-lilac: #b6acfb;
+  --color-hot: #f049a3;
+  --color-mist: #bac1d1;
+  --color-label: #8982b6;
+  --color-rule: #efecff;
+
+  /* Outline colour of the hand-drawn effects (clouds, shards, sparkles). */
+  --color-line: #5a4bd1;
+}
+
+@layer base {
+  html {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    @apply bg-white text-ink antialiased;
+  }
+}
+
+/* Keyboard focus ring shared by every control. */
+@utility focus-ring {
+  outline: none;
+
+  &:focus-visible {
+    outline: 3px solid var(--color-hot);
+    outline-offset: 5px;
+  }
+}
