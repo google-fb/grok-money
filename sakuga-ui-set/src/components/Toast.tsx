@@ -1,5 +1,5 @@
-import { AnimatePresence, delay, motion } from 'framer-motion'
-import { useEffect, useState } from 'react'
+import { AnimatePresence, delay, motion, type TargetAndTransition } from 'framer-motion'
+import { useCallback, useEffect, useState } from 'react'
 import { PuffBurst, type Puff } from '../sakuga/bursts/PuffBurst'
 import { FlickBurst } from '../sakuga/bursts/SparkleBurst'
 import { FxLayer } from '../sakuga/FxLayer'
@@ -14,7 +14,7 @@ const STAY = 2600
 const DROP = 2
 
 /** Dust squeezed out from under both ends when the toast lands. */
-const DUST: Puff[] = [
+const LANDING: Puff[] = [
   { x: -152, y: 28, size: 21, dx: -36, dy: -6, wait: DROP },
   { x: -124, y: 44, size: 13, dx: -22, dy: 8, wait: DROP + 1 },
   { x: 154, y: 28, size: 20, dx: 36, dy: -6, wait: DROP },
@@ -22,6 +22,28 @@ const DUST: Puff[] = [
   { x: -40, y: 46, size: 10, dx: -8, dy: 12, wait: DROP + 1 },
   { x: 56, y: 46, size: 10, dx: 10, dy: 12, wait: DROP + 1 },
 ]
+
+/** What is left along the baseline once the toast has been pressed out of sight. */
+const LEAVING: Puff[] = [
+  { x: -142, y: 30, size: 15, dx: -24, dy: -6, wait: 2 },
+  { x: 146, y: 30, size: 15, dx: 24, dy: -6, wait: 2 },
+  { x: -52, y: 30, size: 10, dx: -6, dy: -14, wait: 3 },
+  { x: 38, y: 31, size: 11, dx: 8, dy: -16, wait: 3 },
+]
+
+/**
+ * A frame of wind-up, then pressed flat onto its baseline. It never fades: it is solid until it
+ * is removed, like a cel. It stops taking clicks at once, so its dismiss button cannot fire a
+ * second time on the way out.
+ */
+const LEAVE: TargetAndTransition = {
+  scaleX: [null, 0.97, 1.1, 1.14],
+  scaleY: [null, 1.1, 0.3, 0.06],
+  pointerEvents: 'none',
+  transition: { duration: frames(4), times: [0, 0.25, 0.75, 1], ease: ['easeOut', 'easeIn', 'linear'] },
+}
+/** Reduced motion skips transforms, so the toast only fades. */
+const FADE: TargetAndTransition = { opacity: 0, pointerEvents: 'none', transition: { duration: frames(4) } }
 
 const FOLLOW = { type: 'spring', stiffness: 700, damping: 26 } as const
 const LAND = frames(9)
@@ -32,19 +54,23 @@ export function Toast() {
   const [saves, setSaves] = useState(0)
   const [hovered, setHovered] = useState(false)
   const [pressed, setPressed] = useState(false)
-  const { bursts, spawn, dismiss } = useBursts(2)
+  const { bursts, spawn, dismiss } = useBursts<'land' | 'leave'>(3)
 
+  const close = useCallback(() => {
+    setToast(0)
+    spawn('leave')
+  }, [spawn])
+
+  // Timed on the animation clock, like everything else the toast does.
   useEffect(() => {
-    if (!toast) return
-    const timer = setTimeout(() => setToast(0), STAY)
-    return () => clearTimeout(timer)
-  }, [toast])
+    if (toast) return delay(close, STAY)
+  }, [toast, close])
 
   function save() {
     const next = saves + 1
     setSaves(next)
     setToast(next)
-    spawn(undefined)
+    spawn('land')
     delay(() => stage.shake(0.45), frames(DROP) * 1000)
   }
 
@@ -72,17 +98,20 @@ export function Toast() {
 
       <div className="relative h-[70px] w-[292px]">
         <FxLayer depth="back">
-          {bursts.map((burst) => (
-            <FlickBurst
-              key={burst.id}
-              seed={burst.seed}
-              y={30}
-              count={12}
-              radius={120}
-              stretch={1.7}
-              wait={DROP}
-            />
-          ))}
+          {bursts.map(
+            (burst) =>
+              burst.data === 'land' && (
+                <FlickBurst
+                  key={burst.id}
+                  seed={burst.seed}
+                  y={30}
+                  count={12}
+                  radius={120}
+                  stretch={1.7}
+                  wait={DROP}
+                />
+              ),
+          )}
         </FxLayer>
 
         <div role="status" className="absolute inset-0 z-10">
@@ -94,7 +123,7 @@ export function Toast() {
                 style={{ originY: 1 }}
                 initial={{ y: -62, scaleX: 0.9, scaleY: 0.5 }}
                 animate={{ y: [-62, 0, 0, 0], scaleX: [0.9, 1.09, 0.97, 1], scaleY: [0.5, 0.7, 1.1, 1] }}
-                exit={{ scaleX: 1.08, scaleY: 0.2, opacity: 0, transition: { duration: frames(3) } }}
+                exit={stage.fx ? LEAVE : FADE}
                 transition={{
                   duration: LAND,
                   times: [0, DROP / 9, 0.56, 1],
@@ -115,7 +144,7 @@ export function Toast() {
                   <motion.button
                     type="button"
                     aria-label="Dismiss"
-                    onClick={() => setToast(0)}
+                    onClick={close}
                     whileHover={{ rotate: 90, scale: 1.2 }}
                     whileTap={{ scale: 0.85 }}
                     className="focus-ring grid size-7 cursor-pointer place-items-center rounded-full"
@@ -132,7 +161,12 @@ export function Toast() {
 
         <FxLayer depth="front">
           {bursts.map((burst) => (
-            <PuffBurst key={burst.id} seed={burst.seed} puffs={DUST} onDone={() => dismiss(burst.id)} />
+            <PuffBurst
+              key={burst.id}
+              seed={burst.seed}
+              puffs={burst.data === 'land' ? LANDING : LEAVING}
+              onDone={() => dismiss(burst.id)}
+            />
           ))}
         </FxLayer>
       </div>
